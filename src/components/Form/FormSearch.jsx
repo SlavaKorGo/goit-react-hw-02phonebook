@@ -5,14 +5,15 @@ import css from './Form.module.css';
 
 // }
 
-const FormSearch = ({ onChange }) => {
+const FormSearch = ({ filter, onChangeFilter }) => {
   return (
     <label className={css.formSearch}>
       Find contacts by name
       <input
         type="text"
         name="filter"
-        onChange={e => onChange(e.currentTarget.value)}
+        value={filter}
+        onChange={onChangeFilter}
         className={css.inputFormSearch}
       />
     </label>
@@ -24,3 +25,5 @@ export default FormSearch;
 FormSearch.propTypes = {
   onChange: PropTypes.func,
 };
+
+

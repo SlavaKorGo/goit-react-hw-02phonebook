@@ -18,41 +18,40 @@ class App extends Component {
     
   };
 
-  addItem = data => {
-    let contact = {
-      id: nanoid(),
-      name: data.name,
-      number: data.number,
-    };
-    const searchArray = this.state.contacts.filter(
-      contact => contact.name.toLowerCase() === data.name
-    );
-    
-    if (searchArray.length !== 0) {
-      alert(`${data.name} is already in contacts`);
-      return;
+
+  addItem = e => {
+    const id = nanoid();
+    const name = e.name;
+    const number = e.number;
+    const contactsLists = [...this.state.contacts];
+
+    if (contactsLists.findIndex(contact => name === contact.name) !== -1) {
+      alert(`${name} is already in contacts.`);
     } else {
-      this.setState(prevState => ({
-        contacts: [contact, ...this.state.contacts],
-      }));
+      contactsLists.push({ name, id, number });
     }
+
+    this.setState({ contacts: contactsLists });
   };
 
-  filterList = searchText => {
-   
-
-    this.setState({
-      contacts: this.state.contacts.filter(contact =>
-        contact.name.toLowerCase().includes(searchText)
-      ),
-    });
+  handleChange = e => {
+    const { name, value } = e.currentTarget;
+    this.setState({ [name]: value });
   };
 
-  deleteItem = idItem => {
-    this.setState(prevstate => ({
-      contacts: prevstate.contacts.filter(contact => contact.id !== idItem),
+  filterList = () => {
+    const { filter, contacts } = this.state;
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
+
+  deleteItem = e => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== e),
     }));
   };
+  
 
   render() {
     return (
@@ -62,9 +61,11 @@ class App extends Component {
           <Form onSubmit={this.addItem} />
           <h2>Contacts</h2>
          
-          <FormSearch onChange={this.filterList} />
+          <FormSearch 
+              filter={this.state.filter}
+              onChangeFilter={this.handleChange} />
           <ContactsList
-            contacts={this.state.contacts}
+            contacts={this.filterList()}
             onDeleteItem={this.deleteItem}
           />
         </div>
@@ -74,3 +75,7 @@ class App extends Component {
 }
 
 export default App;
+
+
+
+
