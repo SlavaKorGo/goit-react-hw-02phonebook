@@ -19,19 +19,33 @@ class App extends Component {
   };
 
 
+  // addItem = e => {
+  //   const id = nanoid();
+  //   const name = e.name;
+  //   const number = e.number;
+    
+
+  //   if (ContactsList.find(contact => name === contact.name)) {
+  //     alert(`${name} is already in contacts.`);
+  //   } 
+
+  //   this.setState({ contacts: ContactsList });
+  // };
+
   addItem = e => {
     const id = nanoid();
     const name = e.name;
     const number = e.number;
-    const contactsLists = [...this.state.contacts];
-
-    if (contactsLists.findIndex(contact => name === contact.name) !== -1) {
+  
+    if (this.state.contacts.find(contact => name === contact.name)) {
       alert(`${name} is already in contacts.`);
-    } else {
-      contactsLists.push({ name, id, number });
+      return;
     }
-
-    this.setState({ contacts: contactsLists });
+  
+    const newContact = { id, name, number };
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, newContact],
+    }));
   };
 
   handleChange = e => {
